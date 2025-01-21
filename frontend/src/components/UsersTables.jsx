@@ -1,60 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import './UsersTables.css';
 
+// Get the API URL from environment variables
+const apiUrl = import.meta.env.VITE_API_URL;
+
 // API Functions
 const fetchPostgresUsers = async (searchQuery = '') => {
   const url = searchQuery.length >= 3 
-    ? `http://127.0.0.1:8000/postgres/users?search_query=${encodeURIComponent(searchQuery)}`
-    : 'http://127.0.0.1:8000/postgres/users';
+    ? `${apiUrl}/postgres/users?search_query=${encodeURIComponent(searchQuery)}`
+    : `${apiUrl}/postgres/users`;
   const response = await fetch(url);
   return await response.json();
 };
 
 const fetchFirebaseUsers = async (searchQuery = '') => {
   const url = searchQuery.length >= 3 
-    ? `http://127.0.0.1:8000/firebase/users?search_query=${encodeURIComponent(searchQuery)}`
-    : 'http://127.0.0.1:8000/firebase/users';
+    ? `${apiUrl}/firebase/users?search_query=${encodeURIComponent(searchQuery)}`
+    : `${apiUrl}/firebase/users`;
   const response = await fetch(url);
   return await response.json();
 };
 
 const addUserToPostgres = async () => {
-  const response = await fetch('http://127.0.0.1:8000/postgres/users', {
+  const response = await fetch(`${apiUrl}/postgres/users`, {
     method: 'POST',
   });
   return await response.json();
 };
 
 const addUserToFirebase = async () => {
-  const response = await fetch('http://127.0.0.1:8000/firebase/users', {
+  const response = await fetch(`${apiUrl}/firebase/users`, {
     method: 'POST',
   });
   return await response.json();
 };
 
 const deleteUserFromPostgres = async (userId) => {
-  const response = await fetch(`http://127.0.0.1:8000/postgres/users/${userId}`, {
+  const response = await fetch(`${apiUrl}/postgres/users/${userId}`, {
     method: 'DELETE',
   });
   return await response.json();
 };
 
 const deleteUserFromFirebase = async (userId) => {
-  const response = await fetch(`http://127.0.0.1:8000/firebase/users/${userId}`, {
+  const response = await fetch(`${apiUrl}/firebase/users/${userId}`, {
     method: 'DELETE',
   });
   return await response.json();
 };
 
 const syncPostgresToFirebase = async () => {
-  const response = await fetch('http://127.0.0.1:8000/sync/postgres-to-firebase', {
+  const response = await fetch(`${apiUrl}/sync/postgres-to-firebase`, {
     method: 'POST',
   });
   return await response.json();
 };
 
 const syncFirebaseToPostgres = async () => {
-  const response = await fetch('http://127.0.0.1:8000/sync/firebase-to-postgres', {
+  const response = await fetch(`${apiUrl}/sync/firebase-to-postgres`, {
     method: 'POST',
   });
   return await response.json();
