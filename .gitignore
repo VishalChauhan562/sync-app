@@ -1,0 +1,17 @@
+# Python-related files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Environment variables
+.env
+
+# Firebase credentials
+firebase_credentials.json
+
+# OS-generated files
+.DS_Store
+
+
+
