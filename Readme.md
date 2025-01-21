@@ -2,7 +2,13 @@
 
 ## Live -> https://sync-app-1.onrender.com/
 
-## Note 
+The live version may take up to 50 seconds to load because the app is deployed on Render's free tier, where containers spin down during periods of inactivity, causing a delay when services are restarted
+
+## Notes
+
+This is how the app interface looks
+<img width="1289" alt="Screenshot 2025-01-22 at 2 00 51 AM" src="https://github.com/user-attachments/assets/89e10dc7-17c8-4aaf-a53d-4826bdd768a2" />
+
 You can add dummy users using the below buttons to test the flow back and forth.
 <img width="781" alt="Screenshot 2025-01-22 at 1 52 36 AM" src="https://github.com/user-attachments/assets/dfce3b42-f737-440d-8a3b-962ff125bc41" />
 
