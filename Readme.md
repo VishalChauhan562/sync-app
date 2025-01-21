@@ -1,4 +1,4 @@
-# Sync App ( Local env setup )
+# Sync App ( Local env setup ) Check Live Demo --> https://sync-app-1.onrender.com/
 
 This repository contains the frontend and backend services of the **Sync App**. The app is containerized using Docker and can be easily started using Docker Compose.
 
