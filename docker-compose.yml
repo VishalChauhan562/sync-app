@@ -17,6 +17,7 @@ services:
     ports:
       - "5173:5173"
     environment:
-      - VITE_API_URL=http://127.0.0.1:8000  # Point to the backend container
+      # Use the service name 'backend' for the VITE_API_URL to ensure it points to the backend container
+      - VITE_API_URL=http://backend:8000  # This will work on Docker's internal network
     depends_on:
-      - backend  # Ensure frontend waits for the backend to be up
+      - backend  # Ensure frontend waits for backend to be up
