@@ -1,12 +1,12 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from app.controllers.firebase_controller import get_users_from_firebase, add_user_to_firebase, UserCreate
 from firebase_admin import auth
 
 router = APIRouter()
 
 @router.get("/users")
-def get_users():
-    return get_users_from_firebase()
+def get_users(search_query: str = Query(None, min_length=3)):
+    return get_users_from_firebase(search_query)
 
 @router.post("/users")
 def add_user():

@@ -1,4 +1,4 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, Query
 from app.models.database import SessionLocal
 from app.models.user import User
 from pydantic import BaseModel
@@ -11,35 +11,36 @@ class UserCreate(BaseModel):
     name: str
     email: str
 
-def get_users_from_postgres():
+def get_users_from_postgres(search_query: str = Query(None, min_length=3)):
     db = SessionLocal()
     try:
-        users = db.query(User).all()
+        query = db.query(User)
+        if search_query:
+            query = query.filter(
+                (User.name.ilike(f"%{search_query}%")) |
+                (User.email.ilike(f"%{search_query}%"))
+            )
+        users = query.order_by(User.timestamp.desc()).all()
         return users
     finally:
         db.close()
 
 def generate_random_name(length=8):
-    # Generate a random string of fixed length using letters and digits
     characters = string.ascii_lowercase + string.digits
     return ''.join(random.choice(characters) for _ in range(length))
 
 def add_user_to_postgres():
     db = SessionLocal()
     try:
-        # Generate a random name and append 'postgres' to it
         while True:
             random_name = generate_random_name() + "_postgres"
-            # Check if the name already exists in the database
             existing_user = db.query(User).filter_by(name=random_name).first()
             if not existing_user:
-                break  # Name is unique, exit the loop
+                break  
 
-        # Generate a random email
         random_email = f"{random_name}@example.com"
 
-        # Create a new user with a random name and email
-        user_id = str(uuid.uuid4())  # Generate a unique user ID
+        user_id = str(uuid.uuid4()) 
         new_user = User(
             user_id=user_id,
             name=random_name,

@@ -10,38 +10,43 @@ class UserCreate(BaseModel):
     name: str
     email: str
 
-def get_users_from_firebase():
+def get_users_from_firebase(search_query: str = None):
     try:
         firebase_users = auth.list_users().users
-        return [{"uid": user.uid, "email": user.email, "name": user.display_name} for user in firebase_users]
+        if search_query:
+            firebase_users = [
+                user for user in firebase_users
+                if search_query.lower() in user.display_name.lower() or search_query.lower() in user.email.lower()
+            ]
+
+        sorted_firebase_users = sorted(
+            firebase_users, key=lambda user: user.user_metadata.creation_timestamp
+        )
+        return [{"uid": user.uid, "email": user.email, "name": user.display_name} for user in sorted_firebase_users]
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 def generate_random_name(length=8):
-    # Generate a random string of fixed length using letters and digits
     characters = string.ascii_lowercase + string.digits
     return ''.join(random.choice(characters) for _ in range(length))
 
 def add_user_to_firebase():
     try:
-        # Generate a random name and append 'firebase' to it
         while True:
             random_name = generate_random_name() + "_firebase"
-            # Check if the name already exists in Firebase (based on email)
             existing_user = None
             try:
                 existing_user = auth.get_user_by_email(f"{random_name}@example.com")
             except auth.UserNotFoundError:
-                pass  # If the user is not found, continue
+                pass  
 
-            if not existing_user:  # If no existing user with the same email, we break out
+            if not existing_user:  
                 break
 
-        # Generate a random email
         random_email = f"{random_name}@example.com"
 
-        # Create a new user in Firebase with the generated data
-        user_id = str(uuid.uuid4())  # Generate a unique user ID
+        user_id = str(uuid.uuid4())  
         new_user = auth.create_user(
             uid=user_id,
             email=random_email,

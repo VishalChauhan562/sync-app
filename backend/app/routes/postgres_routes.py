@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from app.controllers.postgres_controller import get_users_from_postgres, add_user_to_postgres, UserCreate
 from app.models.database import SessionLocal
 from app.models.user import User
@@ -6,8 +6,8 @@ from app.models.user import User
 router = APIRouter()
 
 @router.get("/users")
-def get_users():
-    return get_users_from_postgres()
+def get_users(search_query: str = Query(None, min_length=3)):
+    return get_users_from_postgres(search_query)
 
 @router.post("/users")
 def add_user():
