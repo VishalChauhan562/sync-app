@@ -10,8 +10,8 @@ def get_users():
     return get_users_from_postgres()
 
 @router.post("/users")
-def add_user(user: UserCreate):
-    return add_user_to_postgres(user)
+def add_user():
+    return add_user_to_postgres() 
 
 @router.delete("/users/{user_id}")
 def delete_user_from_postgres(user_id: str):

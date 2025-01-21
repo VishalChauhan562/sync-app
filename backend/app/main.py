@@ -7,9 +7,20 @@ from app.routes.postgres_routes import router as postgres_router
 from app.routes.firebase_routes import router as firebase_router
 from app.services.sync_service import sync_firebase_to_postgres, sync_postgres_to_firebase
 from app.services.firebase import firebase_admin
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 Base.metadata.create_all(bind=engine)
 

@@ -9,8 +9,8 @@ def get_users():
     return get_users_from_firebase()
 
 @router.post("/users")
-def add_user(user: UserCreate):
-    return add_user_to_firebase(user)
+def add_user():
+    return add_user_to_firebase()
 
 
 @router.delete("/users/{user_id}")

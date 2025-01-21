@@ -1,6 +1,9 @@
 from fastapi import HTTPException
 from firebase_admin import auth
 from pydantic import BaseModel
+import uuid
+import random
+import string
 
 class UserCreate(BaseModel):
     user_id: str
@@ -14,13 +17,37 @@ def get_users_from_firebase():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-def add_user_to_firebase(user: UserCreate):
+def generate_random_name(length=8):
+    # Generate a random string of fixed length using letters and digits
+    characters = string.ascii_lowercase + string.digits
+    return ''.join(random.choice(characters) for _ in range(length))
+
+def add_user_to_firebase():
     try:
-        try:
-            existing_user = auth.get_user(user.user_id)
-            raise HTTPException(status_code=400, detail="User already exists in Firebase")
-        except auth.UserNotFoundError:
-            new_user = auth.create_user(uid=user.user_id, email=user.email, display_name=user.name)
-            return {"message": "User added to Firebase successfully", "firebase_user": new_user.uid}
+        # Generate a random name and append 'firebase' to it
+        while True:
+            random_name = generate_random_name() + "_firebase"
+            # Check if the name already exists in Firebase (based on email)
+            existing_user = None
+            try:
+                existing_user = auth.get_user_by_email(f"{random_name}@example.com")
+            except auth.UserNotFoundError:
+                pass  # If the user is not found, continue
+
+            if not existing_user:  # If no existing user with the same email, we break out
+                break
+
+        # Generate a random email
+        random_email = f"{random_name}@example.com"
+
+        # Create a new user in Firebase with the generated data
+        user_id = str(uuid.uuid4())  # Generate a unique user ID
+        new_user = auth.create_user(
+            uid=user_id,
+            email=random_email,
+            display_name=random_name,
+        )
+
+        return {"message": f"User {random_name} added to Firebase successfully", "firebase_user": new_user.uid}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
