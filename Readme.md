@@ -1,4 +1,4 @@
-# Sync App
+# Sync App ( Local env setup )
 
 This repository contains the frontend and backend services of the **Sync App**. The app is containerized using Docker and can be easily started using Docker Compose.
 
