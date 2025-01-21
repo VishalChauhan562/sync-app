@@ -4,16 +4,16 @@ from firebase_admin import auth
 
 router = APIRouter()
 
-@router.get("/users/firebase")
+@router.get("/users")
 def get_users():
     return get_users_from_firebase()
 
-@router.post("/users/firebase")
+@router.post("/users")
 def add_user(user: UserCreate):
     return add_user_to_firebase(user)
 
 
-@router.delete("/users/firebase/{user_id}")
+@router.delete("/users/{user_id}")
 def delete_user_from_firebase(user_id: str):
     try:
         auth.delete_user(user_id)

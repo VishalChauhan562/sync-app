@@ -5,15 +5,15 @@ from app.models.user import User
 
 router = APIRouter()
 
-@router.get("/users/postgres")
+@router.get("/users")
 def get_users():
     return get_users_from_postgres()
 
-@router.post("/users/postgres")
+@router.post("/users")
 def add_user(user: UserCreate):
     return add_user_to_postgres(user)
 
-@router.delete("/users/postgres/{user_id}")
+@router.delete("/users/{user_id}")
 def delete_user_from_postgres(user_id: str):
     db = SessionLocal()
     try:
